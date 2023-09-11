@@ -39,7 +39,7 @@ jobs:
           create_credentials_file: true
           activate_credentials_file: true
           workload_identity_provider: projects/735293554042/locations/global/workloadIdentityPools/my-pool
-          service_account: my-service-account
+          service_account: my-service-account@dark-garden-398406.iam.gserviceaccount.com
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.3.0
       - name: Create API bundle
