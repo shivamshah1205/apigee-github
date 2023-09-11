@@ -48,5 +48,5 @@ jobs:
         id: upload
         run: "echo \"::set-output name=apigee-revision::$(curl --fail -X POST -H \"Content-Type: multipart/form-data\" -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" -F \"file=@proxy.zip\" \"https://apigee.googleapis.com/v1/organizations/dark-garden-398406/apis?action=import&name=hello-world\" --silent | jq --raw-output .revision)\""
       - name: Deploy Revision
-        run: "curl --fail -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" \"https://apigee.googleapis.com/v1/organizations/dark-garden-398406/environments/eval/apis/hello-world/revisions/${{steps.upload.outputs.apigee-revision}}/deployments?override=true\""
+        run: "curl --fail -X POST -H \"Authorization: Bearer ${{steps.auth.outputs.access_token}}\" \"https://apigee.googleapis.com/v1/organizations/dark-garden-398406/environments/eval/apis/hello-world/revisions/1/deployments?override=true\""
   
