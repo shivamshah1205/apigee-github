@@ -159,7 +159,7 @@ jobs:
       - name: mvn deploy config xhybrid
         if: env.API_VERSION == 'googleapi'
         run:  |
-          sed -i "s/target_apigee_env/$APIGEE_ENV/g" ./EdgeConfig/edge.json
+          sed -i "s/target_apigee_env/$APIGEE_ENV/g" ./EdgeConfig/config.json
           cat sa.json
           mvn install -q -Pgoogleapi -Dapigee.org=$APIGEE_ORG -Denv=$APIGEE_ENV -Dsa=sa.json -Dapigee.config.file=./EdgeConfig/edge.json -Dapigee.config.options=update
 
