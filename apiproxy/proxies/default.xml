@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
- Copyright 2022 Google LLC
+ Copyright 2020 Google LLC
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,20 +15,46 @@
  limitations under the License.
 -->
 
+
 <ProxyEndpoint name="default">
   <PreFlow name="PreFlow">
-    <Request/>
-    <Response/>
+    <Response>
+      <Step>
+        <Condition>(proxy.pathsuffix Matches "/airports*") AND (request.verb = "GET")</Condition>
+        <Name>AirportsMock</Name>
+      </Step>
+    </Response>
   </PreFlow>
-  <Flows/>
-  <PostFlow name="PostFlow">
-    <Request/>
-    <Response/>
-  </PostFlow>
+  <Flows>
+    <Flow name="airports-all">
+      <Condition>(proxy.pathsuffix MatchesPath "/airports") AND (request.verb = "GET")</Condition>
+      <Response>
+        <Step>
+          <Name>Javascript.AirportsFilter</Name>
+          
+        </Step>
+      </Response>
+    </Flow>
+    <Flow name="airport-by-id">
+      <Condition>(proxy.pathsuffix MatchesPath "/airports/*") AND (request.verb = "GET")</Condition>
+      <Response>
+        <Step>
+          <Name>Javascript.AirportByIataCode</Name>
+        </Step>
+      </Response>
+    </Flow>
+    <Flow name="unknown-path-suffix">
+      <Request>
+        <Step>
+          <Name>RaiseFault.404</Name>
+        </Step>
+      </Request>
+    </Flow>
+  </Flows>
+  <PostFlow name="PostFlow"/>
   <HTTPProxyConnection>
-    <BasePath>/hello-world</BasePath>
+    <BasePath>/airports-cicd/v1</BasePath>
+    <VirtualHost>secure</VirtualHost>
   </HTTPProxyConnection>
-  <RouteRule name="default">
-    <TargetEndpoint>default</TargetEndpoint>
-  </RouteRule>
+  <RouteRule name="no-target" />
 </ProxyEndpoint>
